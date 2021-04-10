@@ -1,6 +1,7 @@
-# TIL ( Today I Learn )
+# LAB
 
-하루 하루의 배움을 기록하는 곳
+일단 해보자
 
-----
+![LAB](https://media.giphy.com/media/3orifeiukdutqEFies/giphy.gif)
 
+- Vue
