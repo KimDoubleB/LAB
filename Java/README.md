@@ -1,2 +1,1 @@
 - Effective Java
-- Spring Boot docs
