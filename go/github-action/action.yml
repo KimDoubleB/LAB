@@ -1,5 +1,12 @@
 name: "github-action-go"
 description: "An example of building github actions with Go"
+
+inputs:
+  targetUrl:
+    required: true
+
 runs:
   using: docker
   image: Dockerfile
+  args:
+    - ${{ inputs.targetUrl }}
