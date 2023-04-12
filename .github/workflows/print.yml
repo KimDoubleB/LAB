@@ -18,3 +18,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: KimDoubleB/go-action@v1.1
+        with:
+          targetUrl: ${{ secrets.DEV_HEALTH_URL }}
