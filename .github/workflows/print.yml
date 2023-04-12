@@ -1,0 +1,14 @@
+name: Simple custom action using go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  github-action-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: KimDoubleB/go-action@v1
