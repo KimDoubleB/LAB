@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: KimDoubleB/go-action@v1.3
+      - uses: KimDoubleB/go-action@v1.4
         with:
           health_check_url: ${{ secrets.PRD_HEALTH_URL }}
           slack_token: ${{ secrets.SLACK_TOKEN }}
