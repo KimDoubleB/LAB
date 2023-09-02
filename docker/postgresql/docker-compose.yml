@@ -10,4 +10,4 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
     volumes:
-      - ./data/postgres/:/var/lib/postgresql/data
+      - /Users/bobaekim/Documents/dev/LAB/docker/postgresql/data:/var/lib/postgresql/data --user 1000
