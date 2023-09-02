@@ -2,18 +2,22 @@ version: '3.8'
 services:
   mysql:
     image: mysql:5.7
+    # 8.0 버전 이상 원하는 경우
+    # image: mysql:8.1
     platform: linux/amd64 # for apple silicon mac
     container_name: mysql
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: root-pwd!
-      MYSQL_USER: user-id
-      MYSQL_PASSWORD: user-pwd!
-      TZ : "Asia/Seoul"
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      # 한국 시간대 원하면 설정
+      # TZ : "Asia/Seoul"
+    volumes:
+      - ./data:/var/lib/mysql
+      # data 없이 첫 로딩 시, 하위 커맨드 풀고 사용
+      # - ./test-db-updated:/docker-entrypoint-initdb.d
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./data:/var/lib/mysql
-      - ./test-db:/test-db
