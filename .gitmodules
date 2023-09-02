@@ -1,0 +1,3 @@
+[submodule "docker/mysql/test-db"]
+	path = docker/mysql/test-db
+	url = https://github.com/datacharmer/test_db.git
