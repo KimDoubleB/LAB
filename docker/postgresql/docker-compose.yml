@@ -7,7 +7,12 @@ services:
     ports:
       - "5432:5432"
     environment: 
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
-      - /Users/bobaekim/Documents/dev/LAB/docker/postgresql/data:/var/lib/postgresql/data --user 1000
+      - ./data:/var/lib/postgresql/data
+      - ./test-db:/test-db
+      # data 없이 첫 로딩 시, 하위 커맨드 풀고 사용
+      # - ./test-db/restore.sql:/docker-entrypoint-initdb.d/restore.sql
+
+  
