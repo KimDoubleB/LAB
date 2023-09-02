@@ -15,4 +15,5 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     volumes:
-      - /Users/bobaekim/Documents/dev/LAB/docker/mysql/data:/var/lib/mysql --user 1000
+      - ./data:/var/lib/mysql
+      - ./test-db:/test-db
