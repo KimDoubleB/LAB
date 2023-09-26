@@ -1,3 +1,6 @@
 [submodule "docker/mysql/test-db"]
 	path = docker/mysql/test-db
 	url = https://github.com/datacharmer/test_db.git
+[submodule "docker/elastic-search/query-example"]
+	path = docker/elastic-search/query-example
+	url = https://github.com/javacafe-project/elastic-book
