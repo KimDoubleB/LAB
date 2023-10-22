@@ -2,41 +2,53 @@ services:
   elasticsearch:
     container_name: elasticsearch
     platform: linux/amd64
-    image: elasticsearch:6.4.3
+    image: elasticsearch:8.10.2
     ports:
       - 9200:9200
-      - 9300:9300
     networks:
       - default
     volumes:
       - ./data:/usr/share/elasticsearch/data
     environment:
-      - cluster.name=javacafe-cluster
-      - node.name=javacafe-node1
-      - node.master=true
-      - node.data=true
+      - cluster.name=bb-cluster
+      - node.name=bb-node1
       - discovery.type=single-node
-      - bootstrap.system_call_filter=false
+      - ELASTIC_PASSWORD=kimdoubleb
+      # Elasticsearch가 사용중인 힙 메모리 영역을 다른 자바 프로그램이 간섭 못하도록 미리 점유하는 설정, 항상 true로 설정하는것을 권장
+      # elasticsearch 실행시 자신에게 할당된 메모리를 lock한 채로 실행하여 swap으로 메모리가 빠져나가는 것을 방지해준다.
+      - bootstrap.memory_lock=true 
+      # nori 플러그인 설치
+      # - plugin.mandatory=analysis-nori
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - TZ=Asia/Seoul
-    user: root
     restart: always
+    # 일부 애플리케이션에서는 메모리 잠금 기능을 많이 사용해서 기본 제한 값이 작은 경우 문제가 발생함
+    # 이를 이용해 메모리 잠금 제한 해제
+    # 애플리케이션이 필요로 하는 만큼 메모리를 잠그는 것이 가능해짐
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
   kibana:
     container_name: kibana
     platform: linux/amd64
-    image: kibana:6.4.3
+    image: kibana:8.10.2
     ports:
       - 5601:5601
     networks:
       - default
     environment:
-      - "ELASTICSERCH_URL=http://elasticsearch:9200"
-      - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
-      - TZ=Asia/Seoul
+      ELASTICSEARCH_USERNAME: kimdoubleb
+      ELASTICSEARCH_PASSWORD: kimdoubleb-pw
+      # Enrollment token 비활성화
+      XPACK_SECURITY_ENROLLMENT_ENABLED: "false"
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      TZ: Asia/Seoul
+      # "ELASTICSERCH_URL=http://elasticsearch:9200"
     restart: always
     depends_on:
       - elasticsearch
 networks:
   default:
-    external:
-      name: elastic
+    name: elastic
+    external: true
