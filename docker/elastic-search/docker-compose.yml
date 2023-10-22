@@ -1,54 +1,43 @@
 services:
-  elasticsearch:
-    container_name: elasticsearch
-    platform: linux/amd64
-    image: elasticsearch:8.10.2
-    ports:
-      - 9200:9200
-    networks:
-      - default
-    volumes:
-      - ./data:/usr/share/elasticsearch/data
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
     environment:
-      - cluster.name=bb-cluster
-      - node.name=bb-node1
+      - node.name=es
       - discovery.type=single-node
-      - ELASTIC_PASSWORD=kimdoubleb
-      # Elasticsearch가 사용중인 힙 메모리 영역을 다른 자바 프로그램이 간섭 못하도록 미리 점유하는 설정, 항상 true로 설정하는것을 권장
-      # elasticsearch 실행시 자신에게 할당된 메모리를 lock한 채로 실행하여 swap으로 메모리가 빠져나가는 것을 방지해준다.
-      - bootstrap.memory_lock=true 
-      # nori 플러그인 설치
-      # - plugin.mandatory=analysis-nori
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - TZ=Asia/Seoul
-    restart: always
-    # 일부 애플리케이션에서는 메모리 잠금 기능을 많이 사용해서 기본 제한 값이 작은 경우 문제가 발생함
-    # 이를 이용해 메모리 잠금 제한 해제
-    # 애플리케이션이 필요로 하는 만큼 메모리를 잠그는 것이 가능해짐
+      - discovery.seed_hosts=es
+      - ELASTIC_PASSWORD=eseses
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.http.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=basic
+    mem_limit: 1073741824
     ulimits:
       memlock:
         soft: -1
         hard: -1
+    volumes:
+      - es-data:/usr/share/es/data
+      - certs:/usr/share/elasticsearch/config/certs
+      - ./data:/usr/share/elasticsearch/data
+      - type: bind
+        source: ./config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
   kibana:
-    container_name: kibana
-    platform: linux/amd64
-    image: kibana:8.10.2
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es:9200
     ports:
       - 5601:5601
-    networks:
-      - default
-    environment:
-      ELASTICSEARCH_USERNAME: kimdoubleb
-      ELASTICSEARCH_PASSWORD: kimdoubleb-pw
-      # Enrollment token 비활성화
-      XPACK_SECURITY_ENROLLMENT_ENABLED: "false"
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-      TZ: Asia/Seoul
-      # "ELASTICSERCH_URL=http://elasticsearch:9200"
-    restart: always
     depends_on:
-      - elasticsearch
-networks:
-  default:
-    name: elastic
-    external: true
+      - es
+
+volumes:
+  certs:
+    driver: local
+  es-data:
+    driver: local
