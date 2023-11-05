@@ -23,6 +23,11 @@ Elasticsearch 실행시 자신에게 할당된 메모리를 lock한 채로 실�
 - `bin/elasticsearch-plugin install analysis-nori`
 - `docker compose restart`
 
+## 한글 지원을 위한 필터 설정 for 8.10.2
+
+- `bin/elasticsearch-plugin install file:///usr/share/elasticsearch/config/korean-filters.zip`
+- ref: https://github.com/JAVACAFE-STUDY/elasticsearch-2023/issues/5#issuecomment-1787266998
+
 ---
 
 # 참고

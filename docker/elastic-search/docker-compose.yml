@@ -23,8 +23,14 @@ services:
       - certs:/usr/share/elasticsearch/config/certs
       - ./data:/usr/share/elasticsearch/data
       - type: bind
+        source: ./config/userdict_ko.txt
+        target: /usr/share/elasticsearch/config/userdict_ko.txt
+      - type: bind
         source: ./config/elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
+      - type: bind
+        source: ./config/korean-filters.zip
+        target: /usr/share/elasticsearch/config/korean-filters.zip
     ports:
       - 9200:9200
   kibana:
